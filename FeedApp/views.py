@@ -58,7 +58,7 @@ def new_post(request):
     if request.method != 'POST':
         form = PostForm()
     else:
-        form= PostForm(request.POST,request.FILES)
+        form = PostForm(request.POST,request.FILES)
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.username = request.user
@@ -109,21 +109,27 @@ def comments(request, post_id):
 def friends (request):
 #get the admin_profile and user profile to create the first relationship 
     admin_profile = Profile.objects.get(user=1)
-    user_profile = Profile.objects.get (user=request.user)
+    user_profile = Profile.objects.get(user=request.user)
+
 # to get My Friends
-    user_friends = user_profile. friends.all()
+    user_friends = user_profile.friends.all()
     user_friends_profiles = Profile.objects.filter(user__in=user_friends)
+
 # to get Friend Requests sent
-    user_relationships = Relationship.objects. filter (sender=user_profile)
-    request_sent_profiles = user_relationships.values ('receiver')
+    user_relationships = Relationship.objects.filter(sender=user_profile)
+    request_sent_profiles = user_relationships.values('receiver')
+
 # to get eligible profiles - exlcude the user, their existing friends, and friend request sent already
     all_profiles = Profile.objects.exclude(user=request.user).exclude(id__in=user_friends_profiles).exclude(id__in=request_sent_profiles)
+
 # to get friend request received by the user
     request_received_profiles = Relationship.objects.filter(receiver=user_profile,status='sent')
+
 # if this is the first time to access the friend requests page, create the first relationship
 # with the admin of the website( so the admin is friends with everyone)
     if not user_relationships.exists():  #'filter works with exists, 'get' does not
         Relationship.objects.create(sender=user_profile,receiver=admin_profile,status='sent')
+          
 # to check to see WHICH submit button was pressed (sending a friend request or accepting a friend request)
 
 # this is to process all send request
@@ -148,7 +154,7 @@ def friends (request):
             # add the user to find friends list of the senders profile
             relationship_obj.sender.friends.add(request.user)
     
-    context = {'user_friends_profile':user_friends_profiles, 'user_relationships':user_relationships,
+    context = {'user_friends_profiles':user_friends_profiles, 'user_relationships':user_relationships,
                'all_profiles':all_profiles,'request_received_profiles':request_received_profiles}
     
     return render(request,'FeedApp/friends.html',context)
