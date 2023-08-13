@@ -1,15 +1,13 @@
 {% extends "FeedApp/base.html" %}
 {% load bootstrap4 %}
 
-
 {% block content %}
-
 <style>
     table {
-        font-size: 15px;width:auto;
+        font-size: 15px; width: auto;
     }
-    th,td {
-        border: 1px solid black;padding: 6px;
+    th, td {
+        border: 1px solid black; padding: 6px;
     }
 </style>
 
@@ -24,11 +22,11 @@
     </tr>
     {% for friend in user_friends_profiles %}
     <tr>
-        <td>{{friend}}</td>
-        <td>{{friend.first_name}}</td>
-        <td>{{friend.last_name}}</td>
-        <td>{{friend.email}}</td>
-        <td>{{friend.created|date:"M d Y"}}</td>
+        <td>{{ friend.user.username }}</td>
+        <td>{{ friend.first_name }}</td>
+        <td>{{ friend.last_name }}</td>
+        <td>{{ friend.email }}</td>
+        <td>{{ friend.created|date:"M d Y" }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -45,11 +43,11 @@
     </tr>
     <tr>
         {% for r in user_relationships %}
-        <td>{{r.receiver}}</td>
-        <td>{{r.receiver.first_name}}</td>
-        <td>{{r.receiver.last_name}}</td>
-        <td>{{r.created}}</td>
-        <td>{{r.status}}</td>
+        <td>{{ r.receiver.user.username }}</td>
+        <td>{{ r.receiver.first_name }}</td>
+        <td>{{ r.receiver.last_name }}</td>
+        <td>{{ r.created }}</td>
+        <td>{{ r.status }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -65,14 +63,14 @@
             <th>Last Name</th>
             <th>Request</th>
         </tr>
-    {% for profile in all_profiles %}
-    <tr>
-        <td>{{profile}}</td>
-        <td>{{profile.first_name}}</td>
-        <td>{{profile.last_name}}</td>
-        <td><input type="checkbox" name="send_requests" value="{{profile.id}}"></td>
-    </tr>
-    {% endfor %}
+        {% for profile in all_profiles %}
+        <tr>
+            <td>{{ profile.user.username }}</td>
+            <td>{{ profile.first_name }}</td>
+            <td>{{ profile.last_name }}</td>
+            <td><input type="checkbox" name="send_requests" value="{{ profile.id }}"></td>
+        </tr>
+        {% endfor %}
     </table>
     <br><br>
     <button name="submit" class="btn btn-outline-primary" style="float: left;">Send Request</button>
@@ -90,18 +88,17 @@
             <th>Last Name</th>
             <th>Request</th>
         </tr>
-    {% for rr in request_received_profiles %}
-    <tr>
-        <td>{{rr.sender}}</td>
-        <td>{{rr.sender.first_name}}</td>
-        <td>{{rr.sender.last_name}}</td>
-        <td><input type="checkbox" name="receive_requests" value="{{rr.id}}"></td>
-    </tr>
-    {% endfor %}
+        {% for rr in request_received_profiles %}
+        <tr>
+            <td>{{ rr.sender.user.username }}</td>
+            <td>{{ rr.sender.first_name }}</td>
+            <td>{{ rr.sender.last_name }}</td>
+            <td><input type="checkbox" name="receive_requests" value="{{ rr.id }}"></td>
+        </tr>
+        {% endfor %}
     </table>
     <br><br>
     <button name="submit" class="btn btn-outline-primary" style="float: left;">Approve Request</button>
     <br><br><br><br>
 </form>
-
 {% endblock content %}
